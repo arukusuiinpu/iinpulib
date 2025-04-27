@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id 'java-library'
     id 'fabric-loom' version '1.6-SNAPSHOT'
@@ -5,7 +7,11 @@ plugins {
     id 'signing'
 }
 
-version = project.mod_version
+int auto_update_version = 0; String version_filename = project.version_filename
+
+if (!file(version_filename).exists()) new File(projectDir, version_filename).text = auto_update_version as String
+
+version = "1.0.${file(version_filename).text.trim()}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -58,22 +64,88 @@ jar {
     }
 }
 
+ext.publishToMaven = { args ->
+    def repoUrl = args.repoUrl
+    def gitConnection = args.gitConnection
+    def gitDeveloperConnection = args.gitDeveloperConnection
+    def mavenUsername = args.username
+    def mavenPassword = args.password
+    def versionFilename = args.versionFilename ?: "version.txt" // default fallback
+
+    publishing {
+        if (!version.endsWith('snapshot') && file(versionFilename).exists()) {
+            def autoUpdateVersion = file(versionFilename).text.trim() as Integer
+
+            gradle.addListener(new BuildListener() {
+                @Override
+                void buildFinished(BuildResult result) {
+                    if (!result.failure) {
+                        new File(projectDir, versionFilename).text = (autoUpdateVersion + 1) as String
+                        println "Project build ${autoUpdateVersion} complete, version updated."
+                    }
+                }
+
+                @Override void settingsEvaluated(Settings settings) {}
+                @Override void projectsLoaded(Gradle gradle) {}
+                @Override void projectsEvaluated(Gradle gradle) {}
+            })
+        }
+
+        def mavenGroup = project.maven_group
+        def archivesBaseName = project.archives_base_name
+        def projectVersion = project.version
+
+        publications {
+            create("mavenJava", MavenPublication) {
+                groupId = mavenGroup
+                artifactId = archivesBaseName
+                version = projectVersion
+
+                from components.java
+
+                def inputFile = file("src/main/resources/fabric.mod.json")
+                if (inputFile.exists()) {
+                    def json = new JsonSlurper().parseText(inputFile.text)
+
+                    pom {
+                        name = json.name
+                        description = json.description
+                        url = json.contact?.repo ?: ""
+                        developers {
+                            developer {
+                                id = json.authors?.getAt(0) ?: "unknown"
+                                name = json.authors?.getAt(0) ?: "unknown"
+                            }
+                        }
+                        scm {
+                            connection = gitConnection
+                            developerConnection = gitDeveloperConnection
+                            url = repoUrl
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = !version.endsWith('snapshot') ? repoUrl + "/releases" : repoUrl + "/snapshots"
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
+        }
+    }
+}
+
 publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            groupId = project.maven_group
-            artifactId = project.archives_base_name
-            version = project.mod_version
-
-            from components.java
-        }
-    }
-
-    repositories {
-        maven {
-            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
-            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
-            url = project.hasProperty('release') ? releasesRepoUrl : snapshotsRepoUrl
-        }
-    }
+    publishToMaven (
+            repoUrl: "https://repo.repsy.io/mvn/arukusuiinpu/central",
+            gitConnection: "scm:git:git://github.com/arukusuiinpu/iinpulib.git",
+            gitDeveloperConnection: "scm:git:ssh://git@github.com:arukusuiinpu/iinpulib.git",
+            username: repsyUsername,
+            password: repsyPassword,
+            versionFilename: project.version_filename
+    )
 }
