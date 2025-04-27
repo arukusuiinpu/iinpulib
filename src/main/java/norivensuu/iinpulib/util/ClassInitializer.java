@@ -3,7 +3,7 @@ package norivensuu.iinpulib.util;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static norivensuu.iinpulib.Iinpulib.DoAfterModsLoad;
+import static norivensuu.iinpulib.Loading.DoAfterModsLoad;
 
 public interface ClassInitializer {
     void onInitialize();
