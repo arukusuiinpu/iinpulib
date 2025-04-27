@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "iinpulib",
+  "version": "1.0.6+1.21.1",
+  "name": "iinpulib",
+  "description": "Uhhh dis just a silly lib. Don't mind it :>",
+  "authors": [
+    "norivensuu"
+  ],
+  "contact": {
+    "repo": "https://github.com/AlexN/iinpulib"
+  },
+  "license": "MIT",
+  "icon": "assets/iinpulib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "norivensuu.iinpulib.client.IinpulibClient"
+    ],
+    "main": [
+      "norivensuu.iinpulib.Iinpulib"
+    ]
+  },
+  "mixins": [
+    "iinpulib.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": "1.21.1"
+  }
+}

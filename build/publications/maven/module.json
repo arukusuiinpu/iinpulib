@@ -1,0 +1,96 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "norivensuu",
+    "module": "iinpulib",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.7"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "iinpulib-1.0.0.jar",
+          "url": "iinpulib-1.0.0.jar",
+          "size": 3610,
+          "sha512": "50795b0da39ca70baa2b15091864a400fe721298102b411686686ed8de297fda34005dbb07a60ea493f6148741a9a346e4c3cced0d47ef8b49a8f2b754ef059a",
+          "sha256": "9b5a2cedd0708bf6bc5afc8597ad45d8e2ba8bd75f2285d0fed9fa24660ed104",
+          "sha1": "f442033740a47975651ea97f817a7348b45288d7",
+          "md5": "103ccf0373b5cc9e504b42cf3dda23c1"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.fabricmc",
+          "module": "fabric-loader",
+          "version": {
+            "requires": "0.16.14"
+          }
+        },
+        {
+          "group": "net.fabricmc.fabric-api",
+          "module": "fabric-api",
+          "version": {
+            "requires": "0.115.6+1.21.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "iinpulib-1.0.0.jar",
+          "url": "iinpulib-1.0.0.jar",
+          "size": 3610,
+          "sha512": "50795b0da39ca70baa2b15091864a400fe721298102b411686686ed8de297fda34005dbb07a60ea493f6148741a9a346e4c3cced0d47ef8b49a8f2b754ef059a",
+          "sha256": "9b5a2cedd0708bf6bc5afc8597ad45d8e2ba8bd75f2285d0fed9fa24660ed104",
+          "sha1": "f442033740a47975651ea97f817a7348b45288d7",
+          "md5": "103ccf0373b5cc9e504b42cf3dda23c1"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "iinpulib-1.0.0-sources.jar",
+          "url": "iinpulib-1.0.0-sources.jar",
+          "size": 3333,
+          "sha512": "67222be4251f74e18731c33fffda230c3ca9350fa9f75801527ae63f655b2c10f0d841ff5dbde79ef34a564f51efb5e5d789c47f4600759f048ef605e84c2805",
+          "sha256": "f534937bd4b802cbef21a37fcc4fcecfcb12bb9a804db9d093d8c839bed489ff",
+          "sha1": "9dbc321e155483308743ae271786c8411d7ef23c",
+          "md5": "9bbc7925546de0a4f376d9b037ac5137"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"norivensuu.iinpulib","c":"Iinpulib","l":"Iinpulib()","u":"%3Cinit%3E()"},{"p":"norivensuu.iinpulib.client","c":"IinpulibClient","l":"IinpulibClient()","u":"%3Cinit%3E()"},{"p":"norivensuu.iinpulib","c":"Iinpulib","l":"onInitialize()"},{"p":"norivensuu.iinpulib.client","c":"IinpulibClient","l":"onInitializeClient()"}];updateSearchResults();
