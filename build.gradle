@@ -11,7 +11,7 @@ int auto_update_version = 0; String version_filename = project.version_filename
 
 if (!file(version_filename).exists()) new File(projectDir, version_filename).text = auto_update_version as String
 
-version = "1.0.${file(version_filename).text.trim()}+${project.minecraft_version}"
+version = "1.1.${file(version_filename).text.trim()}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -73,7 +73,7 @@ ext.publishToMaven = { args ->
     def versionFilename = args.versionFilename ?: "version.txt" // default fallback
 
     publishing {
-        if (!version.endsWith('snapshot') && file(versionFilename).exists()) {
+        if (file(versionFilename).exists()) {
             def autoUpdateVersion = file(versionFilename).text.trim() as Integer
 
             gradle.addListener(new BuildListener() {
