@@ -1,0 +1,9 @@
+/.gradle
+*.lock
+/.gradle/8.7/checksums
+/.gradle
+.gradle/8.7/checksums/sha1-checksums.bin
+/.gradle
+*.bin
+*.lock
+/.gradle

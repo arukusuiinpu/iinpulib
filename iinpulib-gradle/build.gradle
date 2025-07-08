@@ -1,0 +1,13 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+gradlePlugin {
+    plugins {
+        create("iinpulibGradle") {
+            id = "norivensuu.iinpulib"
+            implementationClass = "norivensuu.iinpulib.IinpulibGradle"
+        }
+    }
+}

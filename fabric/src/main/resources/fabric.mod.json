@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "iinpulib",
+  "version": "${version}",
+  "name": "iinpulib",
+  "description": "Uhhh dis just a silly lib. Don't mind it :>",
+  "authors": [
+    "norivensuu"
+  ],
+  "contact": {
+    "homepage": "https://github.com/AlexN/iinpulib"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/iinpulib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "norivensuu.iinpulib.fabric.IinpulibFabric"
+    ],
+    "client": [
+      "norivensuu.iinpulib.fabric.client.IinpulibFabricClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "architectury": ">=13.0.8",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
