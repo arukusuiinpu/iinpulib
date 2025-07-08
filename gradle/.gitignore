@@ -1,0 +1,4 @@
+/.gradle
+*.lock
+/.gradle/8.7/checksums
+/.gradle
