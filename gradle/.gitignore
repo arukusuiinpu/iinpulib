@@ -5,3 +5,5 @@
 .gradle/8.7/checksums/sha1-checksums.bin
 /.gradle
 *.bin
+*.lock
+/.gradle
