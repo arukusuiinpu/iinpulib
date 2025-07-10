@@ -44,3 +44,4 @@ replay_*.log
 /.gradle/8.7/checksums
 .gradle/8.7/
 **/.gradle/
+.architectury-transformer/
