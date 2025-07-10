@@ -9,15 +9,15 @@ pluginManagement {
 
 rootProject.name = 'iinpulib'
 
-include("common", "iinpulib-gradle")
+include("common", "iinpulib", "iinpulib-gradle")
 
 def properties = new Properties()
 file("gradle.properties").withInputStream {
     properties.load(it)
 }
 
-def platforms = properties.enabled_platforms.split("," as Closure)
+def platforms = properties.enabled_platforms.split(",")
 
 for (int i = 0; i < platforms.size(); i++) {
-    include platforms[i] as Iterable<String>
+    include platforms[i]
 }
