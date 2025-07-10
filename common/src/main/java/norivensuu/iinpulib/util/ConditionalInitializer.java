@@ -1,5 +1,8 @@
 package norivensuu.iinpulib.util;
 
+import norivensuu.iinpulib.dependencies.Dependency;
+import norivensuu.iinpulib.dependencies.DependencyHolder;
+
 public interface ConditionalInitializer {
 
     void onInitialize();
