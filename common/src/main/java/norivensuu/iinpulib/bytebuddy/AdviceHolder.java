@@ -1,5 +1,6 @@
 package norivensuu.iinpulib.bytebuddy;
 
+import io.netty.util.internal.UnstableApi;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
@@ -27,6 +28,8 @@ public class AdviceHolder {
         runtimeInjector = new RuntimeInjector(annotation, advice, methodScanner, logger);
     }
 
+    // DON'T USE THIS METHOD YET, the constructor is enough for now
+    @UnstableApi
     public void Initialize() {
         methodScanner.scanAllAnnotatedMethods();
         runtimeInjector.inject();
