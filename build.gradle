@@ -2,6 +2,8 @@ plugins {
     id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'maven-publish'
+    id 'java'
 }
 
 architectury {
@@ -34,6 +36,11 @@ subprojects {
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         mappings loom.officialMojangMappings()
+
+        implementation "org.reflections:reflections:$rootProject.reflections_version"
+        implementation "io.github.classgraph:classgraph:$rootProject.classgraph_version"
+        implementation "net.bytebuddy:byte-buddy:$rootProject.bytebuddy_version"
+        implementation "net.bytebuddy:byte-buddy-agent:$rootProject.bytebuddy_version"
     }
 
     java {
@@ -47,23 +54,10 @@ subprojects {
         it.options.release = 21
     }
 
-    publishing {
-        publications {
-            register("mavenJava", MavenPublication) {
-                from(components["java"])
-                groupId = project.group.toString()
-                artifactId = "iinpulib"
-                version = project.version.toString()
-            }
-        }
-
-        repositories {
-            maven {
-                url = !project.version.toString().toLowerCase().contains('snapshot') ? "https://repo.repsy.io/mvn/arukusuiinpu/central/releases" : "https://repo.repsy.io/mvn/arukusuiinpu/central/snapshots"
-                credentials {
-                    username = repsyUsername
-                    password = repsyPassword
-                }
+    afterEvaluate {
+        tasks.matching { it.name.toLowerCase().contains("run") }.configureEach {
+            doFirst {
+                jvmArgs += '-XX:+EnableDynamicAgentLoading'
             }
         }
     }

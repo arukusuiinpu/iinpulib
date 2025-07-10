@@ -1,22 +1,22 @@
-package norivensuu.iinpulib.util;
+package norivensuu.iinpulib.dependencies;
 
 import norivensuu.iinpulib.conditions.DependencyCondition;
 
 import java.lang.reflect.Constructor;
 
 public class DependencyHolder {
-    public String modId;
+    public String value;
     public Class<? extends DependencyCondition> condition;
 
     public DependencyHolder(Dependency dependency) {
-        modId = dependency.value();
+        value = dependency.value();
         condition = dependency.condition();
     }
 
     public boolean Check() {
         DependencyCondition holder = instantiateCondition(condition);
 
-        return holder.condition(modId);
+        return holder.condition(value);
     }
 
     public static DependencyCondition instantiateCondition(Class<? extends DependencyCondition> clazz) {

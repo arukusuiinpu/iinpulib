@@ -1,5 +1,7 @@
 package norivensuu.iinpulib.util;
 
+import norivensuu.iinpulib.dependencies.Dependency;
+
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
