@@ -1,11 +1,11 @@
-package norivensuu.iinpulib.dependencies;
+package norivensuu.iinpulib.util;
 
 import norivensuu.iinpulib.conditions.DependencyCondition;
 
 import java.lang.reflect.Constructor;
 
 public class DependencyHolder {
-    public String value;
+    public Object value;
     public Class<? extends DependencyCondition> condition;
 
     public DependencyHolder(Dependency dependency) {

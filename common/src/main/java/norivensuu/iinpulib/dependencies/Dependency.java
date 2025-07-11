@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface Dependency {
+public @interface StringDependency {
     String value();
     Class<? extends DependencyCondition> condition() default ModLoadedCondition.class;
 }
+
