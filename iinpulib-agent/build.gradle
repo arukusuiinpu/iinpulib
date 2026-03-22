@@ -1,8 +1,6 @@
 plugins {
-    id 'dev.architectury.loom'
-    id 'architectury-plugin'
+    id 'java'
     id 'com.github.johnrengelman.shadow'
-    id 'maven-publish'
 }
 
 architectury {
@@ -14,19 +12,7 @@ configurations {
 }
 
 dependencies {
-    shadowOnly "net.bytebuddy:byte-buddy:${rootProject.bytebuddy_version}"
-    shadowOnly "net.bytebuddy:byte-buddy-agent:${rootProject.bytebuddy_version}"
-
     shadowOnly (project(":common")) { transitive = false }
-//    shadowOnly (project(":iinpulib-gradle")) { transitive = false }
-
-    def platforms = rootProject.enabled_platforms.split(",")
-
-    for (int i = 0; i < platforms.size(); i++) {
-        shadowOnly(project(":${platforms[i]}")) {
-            transitive = false
-        }
-    }
 }
 
 java {
@@ -38,53 +24,13 @@ tasks.named("sourcesJar").configure {
     archiveClassifier.set('sources')
 }
 
-shadowJar {
-    archiveBaseName.set(rootProject.archives_name)
-    archiveClassifier.set('')
-    zip64 true
-
-    configurations = [project.configurations.shadowOnly]
-
-    includeEmptyDirs = false
-
-    // OPTIONALLY relocate (prevents classloader conflicts)
-    // relocate 'net.bytebuddy', "${rootProject.group}.shadow.bytebuddy"
-}
-
-tasks.build.dependsOn shadowJar
-
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            groupId = rootProject.maven_group
-            artifactId = rootProject.archives_name
-            version = rootProject.mod_version
-
-            artifact(shadowJar) {
-                builtBy(shadowJar)
-            }
-            artifact(sourcesJar)
-        }
-    }
-
-    repositories {
-        maven {
-            url = version.toString().contains("snapshot") || version.toString().contains("unstable") ?
-                    "https://repo.repsy.io/mvn/arukusuiinpu/central/snapshots" :
-                    "https://repo.repsy.io/mvn/arukusuiinpu/central/releases"
-            credentials {
-                username = repsyUsername
-                password = repsyPassword
-            }
-        }
-    }
-}
-
-tasks.named("publish").configure {
-    doLast {
-        println "Artifacts published in 'mavenJava' publication:"
-        publishing.publications.mavenJava.artifacts.each { artifact ->
-            println " - file: ${artifact.file}, type: ${artifact.extension}, classifier: ${artifact.classifier ?: 'none'}"
-        }
+jar {
+    manifest {
+        attributes(
+                "Premain-Class": "norivensuu.iinpulib.IinpulibAgent",
+                "Agent-Class": "norivensuu.iinpulib.IinpulibAgent",
+                "Can-Redefine-Classes": "true",
+                "Can-Retransform-Classes": "true"
+        )
     }
 }

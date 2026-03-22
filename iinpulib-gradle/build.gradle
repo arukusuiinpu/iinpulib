@@ -7,7 +7,7 @@ gradlePlugin {
     plugins {
         create("iinpulibGradle") {
             id = "norivensuu.iinpulib"
-            implementationClass = "norivensuu.iinpulib.IinpulibGradle"
+            implementationClass = "norivensuu.iinpulib.gradle.IinpulibGradle"
         }
     }
 }

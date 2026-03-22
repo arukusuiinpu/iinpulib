@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface IfDependency {
+public @interface Dependency {
     String value();
-    Class<? extends DependencyCondition> condition() default ModLoadedCondition.class;
+    Class<? extends DependencyCondition> ifCondition() default NullCondition.class;
+    Class<? extends DependencyCondition> whenCondition() default NullCondition.class;
 }

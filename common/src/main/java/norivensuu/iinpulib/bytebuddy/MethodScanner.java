@@ -1,6 +1,7 @@
 package norivensuu.iinpulib.bytebuddy;
 
 import io.github.classgraph.ClassGraph;
+import norivensuu.iinpulib.util.ConditionalInitializer;
 import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
@@ -63,12 +64,12 @@ public class MethodScanner {
         Set<Class<?>> classes = new HashSet<>();
         try (var scanResult = new ClassGraph()
                 .enableAllInfo()
-                .acceptPackages("norivensuu.iinpulib")
                 .scan()) {
 
             for (var classInfo : scanResult.getAllClasses()) {
                 try {
-                    classes.add(classInfo.loadClass(false));
+                    Class<?> clazz = classInfo.loadClass(false);
+                    classes.add(clazz);
                 } catch (Throwable ignored) {}
             }
         }

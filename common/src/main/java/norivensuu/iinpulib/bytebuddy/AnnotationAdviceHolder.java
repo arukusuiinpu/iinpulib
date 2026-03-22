@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import static norivensuu.iinpulib.Iinpulib.MOD_ID;
 import static norivensuu.iinpulib.Iinpulib.adviceList;
 
-public class AdviceHolder {
+public class AnnotationAdviceHolder {
     public Class<? extends Annotation> annotation;
     public Class<?> advice;
 
@@ -20,7 +20,7 @@ public class AdviceHolder {
 
     public Logger logger;
 
-    public AdviceHolder(Class<? extends Annotation> annotation, Class<?> advice) {
+    public AnnotationAdviceHolder(Class<? extends Annotation> annotation, Class<?> advice) {
         this.annotation = annotation;
         this.advice = advice;
 

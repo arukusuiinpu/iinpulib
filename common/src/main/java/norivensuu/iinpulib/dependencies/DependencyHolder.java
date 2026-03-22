@@ -1,80 +1,95 @@
 package norivensuu.iinpulib.dependencies;
 
 import norivensuu.iinpulib.conditions.DependencyCondition;
+import norivensuu.iinpulib.conditions.NullCondition;
 
 import java.lang.reflect.Constructor;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DependencyHolder {
     public String value;
     public Class<? extends DependencyCondition> ifCondition;
     public Class<? extends DependencyCondition> whenCondition;
 
-    // Simple shared executor for whenCondition polling
-    private static final ExecutorService WHEN_EXECUTOR =
+    public static final ExecutorService EXECUTOR =
             Executors.newCachedThreadPool();
 
     public DependencyHolder(Dependency dependency) {
         value = dependency.value();
-        ifCondition = dependency.ifCondition();
-        whenCondition = dependency.whenCondition();
+        ifCondition = !dependency.ifCondition().equals(NullCondition.class) ? dependency.ifCondition() : null;
+        whenCondition = !dependency.whenCondition().equals(NullCondition.class) ? dependency.whenCondition() : null;
     }
 
-    /**
-     * Synchronous "if" check – unchanged.
-     */
-    public boolean Check() {
-        DependencyCondition holder = instantiateCondition(ifCondition);
-        return holder.condition(value);
+    public AtomicReference<Boolean> checkOrWait(long pollIntervalMillis) {
+        var atomic = new AtomicReference<Boolean>(null);
+        if (ifCondition != null) {
+            atomic.set(check());
+        }
+        else if (whenCondition != null) {
+            return whenAsync(pollIntervalMillis);
+        }
+
+        return atomic;
     }
 
-    /**
-     * Asynchronous "when" – runs `callback` once,
-     * the first time whenCondition(value) becomes true.
-     *
-     * If whenCondition is DependencyCondition.class (or some sentinel),
-     * or null, this is a no-op.
-     */
-    public void whenAsync(Consumer<DependencyHolder> callback,
-                          long pollIntervalMillis) {
+    public AtomicReference<Boolean> checkOrWait() {
+        return checkOrWait(200L);
+    }
+
+    public boolean check() {
+        if (ifCondition != null) {
+            DependencyCondition holder = instantiateCondition(ifCondition);
+            return holder.condition(value);
+        }
+        else return true;
+    }
+
+    public AtomicReference<Boolean> whenAsync(long pollIntervalMillis) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        var atomic = new AtomicReference<Boolean>(null);
 
         if (whenCondition == null
                 || whenCondition == DependencyCondition.class) {
-            // No when-condition specified – nothing to do
-            return;
+            atomic.set(true);
+            return atomic;
         }
 
         final DependencyCondition condition = instantiateCondition(whenCondition);
         final AtomicBoolean fired = new AtomicBoolean(false);
 
-        WHEN_EXECUTOR.submit(() -> {
+        EXECUTOR.submit(() -> {
             try {
-                while (!fired.get()) {
-                    // evaluate condition
+                while (!fired.get() && !future.isCancelled()) {
                     if (condition.condition(value)) {
                         if (fired.compareAndSet(false, true)) {
-                            // fire exactly once
-                            callback.accept(this);
+                            future.complete(true);
+                            atomic.set(true);
                         }
                         break;
                     }
 
-                    // sleep before next check
                     Thread.sleep(pollIntervalMillis);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                // Optional: log interruption
+                future.completeExceptionally(e);
             } catch (Throwable t) {
-                // Optional: log unexpected errors
-                throw new IllegalStateException(
-                        "Error while evaluating whenCondition " + whenCondition.getName(), t);
+                future.completeExceptionally(
+                        new IllegalStateException(
+                                "Error while evaluating whenCondition " + whenCondition.getName(), t));
             }
         });
+
+        return atomic;
+    }
+
+    public AtomicReference<Boolean> whenAsync() {
+        return whenAsync(200L);
     }
 
     public static DependencyCondition instantiateCondition(Class<? extends DependencyCondition> clazz) {

@@ -1,4 +1,9 @@
 package norivensuu.iinpulib.virtual.item;
 
-public class VirtualItem {
+import net.minecraft.world.item.Item;
+
+public abstract class VirtualItem extends Item {
+    public VirtualItem(Properties properties) {
+        super(properties);
+    }
 }

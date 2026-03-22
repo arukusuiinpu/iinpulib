@@ -6,6 +6,6 @@ import org.gradle.api.Project;
 public class IinpulibGradle implements Plugin<Project> {
     @Override
     public void apply(Project project) {
-        project.getLogger().lifecycle("✅ IinpulibGradle applied!");
+        project.getLogger().lifecycle("IinpulibGradle applied!");
     }
 }

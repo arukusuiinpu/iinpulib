@@ -7,3 +7,18 @@ dependencies {
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 }
+
+loom {
+    accessWidenerPath = file("src/main/resources/${project.archives_name}.accesswidener")
+}
+
+jar {
+    manifest {
+        attributes(
+                "Premain-Class": "norivensuu.iinpulib.Iinpulib",
+                "Agent-Class": "norivensuu.iinpulib.Iinpulib",
+                "Can-Redefine-Classes": "true",
+                "Can-Retransform-Classes": "true"
+        )
+    }
+}

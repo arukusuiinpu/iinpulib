@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static norivensuu.iinpulib.Iinpulib.LOGGER;
 import static norivensuu.iinpulib.Iinpulib.instrumentation;
 
 public class RuntimeInjector {

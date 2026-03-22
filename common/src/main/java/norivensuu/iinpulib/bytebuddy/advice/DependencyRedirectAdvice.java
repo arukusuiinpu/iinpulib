@@ -5,6 +5,7 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import norivensuu.iinpulib.bytebuddy.wrapper.DependencyRedirectRuntimeWrapper;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static norivensuu.iinpulib.Iinpulib.LOGGER;
 
@@ -18,8 +19,8 @@ public class DependencyRedirectAdvice {
     ) {
 
         DependencyRedirectRuntimeWrapper wrapper = new DependencyRedirectRuntimeWrapper(method);
-
-        if (!wrapper.shouldRun())
+        var future = wrapper.shouldRun();
+        if (!future.get())
             return false;
 
         if (method.getReturnType().equals(void.class)) {

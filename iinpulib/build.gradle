@@ -14,8 +14,11 @@ configurations {
 }
 
 dependencies {
+    shadowOnly "net.bytebuddy:byte-buddy:${rootProject.bytebuddy_version}"
+    shadowOnly "net.bytebuddy:byte-buddy-agent:${rootProject.bytebuddy_version}"
+
     shadowOnly (project(":common")) { transitive = false }
-    shadowOnly (project(":iinpulib-gradle")) { transitive = false }
+//    shadowOnly (project(":iinpulib-gradle")) { transitive = false }
 
     def platforms = rootProject.enabled_platforms.split(",")
 
@@ -30,11 +33,22 @@ java {
     withSourcesJar()
 }
 
+tasks.named("sourcesJar").configure {
+    archiveBaseName.set(rootProject.archives_name)
+    archiveClassifier.set('sources')
+}
+
 shadowJar {
+    archiveBaseName.set(rootProject.archives_name)
     archiveClassifier.set('')
     zip64 true
 
     configurations = [project.configurations.shadowOnly]
+
+    includeEmptyDirs = false
+
+    // OPTIONALLY relocate (prevents classloader conflicts)
+    // relocate 'net.bytebuddy', "${rootProject.group}.shadow.bytebuddy"
 }
 
 tasks.build.dependsOn shadowJar

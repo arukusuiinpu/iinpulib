@@ -1,9 +1,11 @@
 plugins {
-    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id 'maven-publish'
     id 'java'
+
+    id "norivensuu.iinpulib"
 }
 
 architectury {
@@ -33,12 +35,17 @@ subprojects {
         // for more information about repositories.
     }
 
+    configurations {
+        shadowOnly
+    }
+
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         mappings loom.officialMojangMappings()
 
         implementation "org.reflections:reflections:$rootProject.reflections_version"
         implementation "io.github.classgraph:classgraph:$rootProject.classgraph_version"
+
         implementation "net.bytebuddy:byte-buddy:$rootProject.bytebuddy_version"
         implementation "net.bytebuddy:byte-buddy-agent:$rootProject.bytebuddy_version"
     }
@@ -57,8 +64,22 @@ subprojects {
     afterEvaluate {
         tasks.matching { it.name.toLowerCase().contains("run") }.configureEach {
             doFirst {
+                def agentJar = project(":iinpulib-agent").tasks.jar.archiveFile.get().asFile.absolutePath
+
+                jvmArgs += "-javaagent:${agentJar}"
                 jvmArgs += '-XX:+EnableDynamicAgentLoading'
             }
+        }
+    }
+
+    jar {
+        manifest {
+            attributes(
+                    "Premain-Class": "norivensuu.iinpulib.Iinpulib",
+                    "Agent-Class": "norivensuu.iinpulib.Iinpulib",
+                    "Can-Redefine-Classes": "true",
+                    "Can-Retransform-Classes": "true"
+            )
         }
     }
 }

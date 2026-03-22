@@ -1,10 +1,13 @@
 package norivensuu.iinpulib.bytebuddy.wrapper;
 
-import norivensuu.iinpulib.dependencies.Dependency;
-import norivensuu.iinpulib.dependencies.DependencyHolder;
-import norivensuu.iinpulib.dependencies.DependencyRedirect;
+import norivensuu.iinpulib.dependencies.*;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static norivensuu.iinpulib.dependencies.DependencyHolder.EXECUTOR;
 
 public class DependencyRedirectRuntimeWrapper extends RuntimeWrapper {
     public DependencyRedirectRuntimeWrapper(Method method) {
@@ -20,18 +23,20 @@ public class DependencyRedirectRuntimeWrapper extends RuntimeWrapper {
     }
 
     @Override
-    public boolean shouldRun() {
+    public AtomicReference<Boolean> shouldRun() {
+        var atomic = new AtomicReference<Boolean>(null);
         DependencyRedirect requires = method.getAnnotation(DependencyRedirect.class);
 
-        if (requires == null) return true;
+        if (requires == null) {
+            atomic.set(true);
+            return atomic;
+        }
 
         Dependency dependency = requires.value();
 
-        if (!new DependencyHolder(dependency).Check()) {
-            return false;
-        }
+        DependencyHolder holder = new DependencyHolder(dependency);
 
-        return true;
+        return holder.checkOrWait();
     }
 
     public Object invokeRedirect(String targetName, Object[] args) {

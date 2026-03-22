@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Premain-Class: norivensuu.iinpulib.Iinpulib
+Agent-Class: norivensuu.iinpulib.Iinpulib
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true

@@ -1,4 +1,3 @@
 accessWidener v2 named
 
-accessible class net/minecraft/client/texture/PlayerSkinProvider$FileCache
-accessible method net/minecraft/block/CropBlock getSeedsItem ()Lnet/minecraft/item/ItemConvertible;
+accessible field net/minecraft/core/MappedRegistry frozen Z

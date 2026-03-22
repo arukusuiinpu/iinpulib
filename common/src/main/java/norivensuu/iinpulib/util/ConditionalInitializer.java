@@ -8,19 +8,26 @@ public interface ConditionalInitializer {
     void onInitialize();
 
     static ConditionalInitializer Initialize(Class<? extends ConditionalInitializer> clazz) {
-        ConditionalInitializer localInstance = createInitializer(clazz);
-
         if (clazz.isAnnotationPresent(Requires.class)) {
             var requirements = clazz.getAnnotation(Requires.class);
 
             for (Dependency dependency : requirements.value()) {
                 DependencyHolder holder = new DependencyHolder(dependency);
-
-                if (!holder.Check()) return null;
+                if (!holder.check()) return null;
             }
-
-            localInstance.onInitialize();
         }
+
+        // At this point it's safe to load the class and run its static initializers
+        try {
+            Class.forName(clazz.getName(), true, clazz.getClassLoader()); // Triggers <clinit> only now
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        // Now instantiate
+        ConditionalInitializer localInstance = createInitializer(clazz);
+        localInstance.onInitialize();
         return localInstance;
     }
 

@@ -9,7 +9,8 @@ pluginManagement {
 
 rootProject.name = 'iinpulib'
 
-include("common", "iinpulib", "iinpulib-gradle")
+include("common", "iinpulib", "iinpulib-agent")
+includeBuild("iinpulib-gradle")
 
 def properties = new Properties()
 file("gradle.properties").withInputStream {
