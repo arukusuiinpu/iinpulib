@@ -34,12 +34,12 @@ java {
 }
 
 tasks.named("sourcesJar").configure {
-    archiveBaseName.set(rootProject.archives_name)
+    archiveBaseName.set(project.archives_name)
     archiveClassifier.set('sources')
 }
 
 shadowJar {
-    archiveBaseName.set(rootProject.archives_name)
+    archiveBaseName.set(project.archives_name)
     archiveClassifier.set('')
     zip64 true
 
