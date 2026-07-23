@@ -41,7 +41,7 @@ public class DependencyRedirectRuntimeWrapper extends RuntimeWrapper {
 
     public Object invokeRedirect(String targetName, Object[] args) {
         try {
-            Method target = resolveMethod(targetName); // resolve based on annotation
+            Method target = resolveMethod(targetName);
             return target.invoke(null, args); // static method expected
         } catch (Exception e) {
             throw new RuntimeException("Redirect failed", e);
@@ -58,7 +58,6 @@ public class DependencyRedirectRuntimeWrapper extends RuntimeWrapper {
 
         try {
             Class<?> cls = Class.forName(className);
-            // You can improve this to match exact parameters
             for (Method m : cls.getDeclaredMethods()) {
                 if (m.getName().equals(methodName)) {
                     m.setAccessible(true);

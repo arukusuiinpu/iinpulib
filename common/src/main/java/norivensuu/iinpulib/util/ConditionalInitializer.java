@@ -17,15 +17,13 @@ public interface ConditionalInitializer {
             }
         }
 
-        // At this point it's safe to load the class and run its static initializers
         try {
-            Class.forName(clazz.getName(), true, clazz.getClassLoader()); // Triggers <clinit> only now
+            Class.forName(clazz.getName(), true, clazz.getClassLoader());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
 
-        // Now instantiate
         ConditionalInitializer localInstance = createInitializer(clazz);
         localInstance.onInitialize();
         return localInstance;

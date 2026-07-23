@@ -11,6 +11,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static norivensuu.iinpulib.Iinpulib.LOGGER;
+
 public class DependencyHolder {
     public String value;
     public Class<? extends DependencyCondition> ifCondition;
@@ -23,6 +25,11 @@ public class DependencyHolder {
         value = dependency.value();
         ifCondition = !dependency.ifCondition().equals(NullCondition.class) ? dependency.ifCondition() : null;
         whenCondition = !dependency.whenCondition().equals(NullCondition.class) ? dependency.whenCondition() : null;
+    }
+    public DependencyHolder(String value, Class<? extends DependencyCondition> ifCondition, Class<? extends DependencyCondition> whenCondition) {
+        this.value = value;
+        this.ifCondition = ifCondition;
+        this.whenCondition = whenCondition;
     }
 
     public AtomicReference<Boolean> checkOrWait(long pollIntervalMillis) {
@@ -76,9 +83,11 @@ public class DependencyHolder {
                     Thread.sleep(pollIntervalMillis);
                 }
             } catch (InterruptedException e) {
+                e.printStackTrace();
                 Thread.currentThread().interrupt();
                 future.completeExceptionally(e);
             } catch (Throwable t) {
+                t.printStackTrace();
                 future.completeExceptionally(
                         new IllegalStateException(
                                 "Error while evaluating whenCondition " + whenCondition.getName(), t));

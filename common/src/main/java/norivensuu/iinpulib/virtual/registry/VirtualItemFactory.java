@@ -25,7 +25,6 @@ public final class VirtualItemFactory {
             return new ByteBuddy()
                     .subclass(Item.class)
                     .name("norivensuu.iinpulib.virtual." + internalName)
-                    // no explicit constructor definition needed in most MC versions
                     .make()
                     .load(VirtualItemFactory.class.getClassLoader())
                     .getLoaded();

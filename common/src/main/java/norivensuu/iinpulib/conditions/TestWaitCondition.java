@@ -11,6 +11,6 @@ public class TestWaitCondition implements DependencyCondition {
         Minecraft mc = Minecraft.getInstance();
         // LOGGER.info("{} {}", mc.level, mc.player);
 
-        return mc.level != null && mc.player != null;
+        return mc != null && mc.level != null && mc.player != null;
     }
 }

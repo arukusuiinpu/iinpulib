@@ -14,17 +14,15 @@
   "icon": "assets/iinpulib/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "preLaunch": [
       "norivensuu.iinpulib.fabric.IinpulibFabric"
-    ],
-    "client": [
-      "norivensuu.iinpulib.fabric.client.IinpulibFabricClient"
     ]
   },
   "depends": {
     "fabricloader": ">=0.17.2",
     "minecraft": ">=1.21.8",
     "java": ">=21",
+    "architectury": "*",
     "fabric-api": "*"
   }
 }

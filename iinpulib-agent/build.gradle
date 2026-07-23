@@ -24,13 +24,13 @@ tasks.named("sourcesJar").configure {
     archiveClassifier.set('sources')
 }
 
-jar {
-    manifest {
-        attributes(
-                "Premain-Class": "norivensuu.iinpulib.IinpulibAgent",
-                "Agent-Class": "norivensuu.iinpulib.IinpulibAgent",
-                "Can-Redefine-Classes": "true",
-                "Can-Retransform-Classes": "true"
-        )
-    }
-}
+//jar {
+//    manifest {
+//        attributes(
+//                "Premain-Class": "norivensuu.iinpulib.IinpulibAgent",
+//                "Agent-Class": "norivensuu.iinpulib.IinpulibAgent",
+//                "Can-Redefine-Classes": "true",
+//                "Can-Retransform-Classes": "true"
+//        )
+//    }
+//}

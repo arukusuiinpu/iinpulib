@@ -32,8 +32,7 @@ public class MethodScanner {
 
                     break;
                 }
-            } catch (NoClassDefFoundError | ExceptionInInitializerError | SecurityException ignored) {
-                // Ignore broken classes (common in mod environments)
+            } catch (Throwable ignored) {
             }
         }
 
@@ -53,7 +52,7 @@ public class MethodScanner {
                     }
                 }
             }
-        } catch (NoClassDefFoundError | ExceptionInInitializerError | SecurityException ignored) {
+        } catch (Throwable ignored) {
             // Ignore broken classes (common in mod environments)
         }
 
@@ -72,6 +71,9 @@ public class MethodScanner {
                     classes.add(clazz);
                 } catch (Throwable ignored) {}
             }
+        }
+        catch (Throwable ignored) {
+
         }
         return classes;
     }

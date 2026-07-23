@@ -64,9 +64,9 @@ subprojects {
     afterEvaluate {
         tasks.matching { it.name.toLowerCase().contains("run") }.configureEach {
             doFirst {
-                def agentJar = project(":iinpulib-agent").tasks.jar.archiveFile.get().asFile.absolutePath
-
-                jvmArgs += "-javaagent:${agentJar}"
+//                def agentJar = project(":iinpulib-agent").tasks.jar.archiveFile.get().asFile.absolutePath
+//
+//                jvmArgs += "-javaagent:${agentJar}"
                 jvmArgs += '-XX:+EnableDynamicAgentLoading'
             }
         }
